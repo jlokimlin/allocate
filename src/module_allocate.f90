@@ -1,24 +1,37 @@
-program alloc
+module module_allocate
 
-implicit none
+    use, intrinsic :: iso_fortran_env, only: &
+        wp => REAL64, &
+        ip => INT32
 
-integer, parameter :: dp=kind(0.d0)
+    ! Explicit typing only
+    implicit none
 
-do while (.true.)
-    call f()
-end do
+     ! Everything is private unless stated otherwise
+    private
+    public :: allocate_one_dimensional_array
 
 contains
+    !
+    !*****************************************************************************************
+    !
+    subroutine allocate_one_dimensional_array( n )
+        !--------------------------------------------------------------------------------
+        ! Dictionary: calling arguments
+        !--------------------------------------------------------------------------------
+        integer (ip), intent (in) :: n
+        !--------------------------------------------------------------------------------
+        ! Dictionary: local variables
+        !--------------------------------------------------------------------------------
+        real (wp), allocatable :: array(:)
+        !--------------------------------------------------------------------------------
 
-subroutine f()
-real(dp), pointer :: A(:)
-call test(A)
-end subroutine
+        if ( n > 0 ) then
+            allocate( array(n) )
+        end if
 
-subroutine test(A)
-real(dp), pointer, intent(out) :: A(:)
-allocate(A(10000000))
-A(1) = 5
-end subroutine
-
-end program
+    end subroutine
+    !
+    !*****************************************************************************************
+    !
+end module module_allocate
